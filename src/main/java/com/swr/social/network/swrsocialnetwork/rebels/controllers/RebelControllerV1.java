@@ -62,7 +62,7 @@ public class RebelControllerV1 {
 
         Rebel accusedRebel = rebelService.findById(idAccused).orElseThrow(RebelNotFoundException::new);
 
-        if (rebelService.validateDenunciation(accuserRebel)) {
+        if (!rebelService.isRenegade(accuserRebel)) {
             Rebel rebel = rebelService.incrementDenunciations(accusedRebel);
             return new ResponseEntity<Rebel>(rebelService.save(rebel), HttpStatus.OK);
         }

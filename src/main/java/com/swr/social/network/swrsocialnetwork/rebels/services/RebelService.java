@@ -30,8 +30,8 @@ public class RebelService {
         return rebelDAO.save(rebel);
     }
 
-    public boolean validateDenunciation(Rebel accuserRebel) {
-        return !accuserRebel.getIsRenegade();
+    public boolean isRenegade(Rebel rebel) {
+        return rebel.getIsRenegade();
     }
 
     public Rebel incrementDenunciations(Rebel rebel) {
