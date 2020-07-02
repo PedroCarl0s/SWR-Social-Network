@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import com.swr.social.network.swrsocialnetwork.rebels.exceptions.RebelNotFoundException;
+import com.swr.social.network.swrsocialnetwork.rebels.exceptions.RenegadeReportException;
 import com.swr.social.network.swrsocialnetwork.rebels.models.Location;
 import com.swr.social.network.swrsocialnetwork.rebels.models.Rebel;
 import com.swr.social.network.swrsocialnetwork.rebels.services.RebelService;
@@ -37,8 +38,7 @@ public class RebelControllerV1 {
 
     @GetMapping("/{id}")
     public ResponseEntity<Rebel> findById(@PathVariable("id") Long id) {
-        Rebel rebel = rebelService.findById(id)
-                .orElseThrow(RebelNotFoundException::new);
+        Rebel rebel = rebelService.findById(id).orElseThrow(RebelNotFoundException::new);
 
         return new ResponseEntity<Rebel>(rebel, HttpStatus.OK);
     }
@@ -50,21 +50,24 @@ public class RebelControllerV1 {
 
     @PatchMapping("/{id}")
     public ResponseEntity<Rebel> updateLocation(@PathVariable("id") Long id, @Valid @RequestBody Location newLocation) {
-        Rebel rebel = rebelService.findById(id)
-                .orElseThrow(RebelNotFoundException::new);
+        Rebel rebel = rebelService.findById(id).orElseThrow(RebelNotFoundException::new);
         rebel.setLocation(newLocation);
 
         return new ResponseEntity<Rebel>(rebelService.save(rebel), HttpStatus.OK);
     }
 
-    @PatchMapping("/report/{id}")
-    public ResponseEntity<Rebel> reportRebel (@PathVariable("id") Long idAccused) {
-        Rebel accusedRebel = rebelService.findById(idAccused)
-                .orElseThrow(RebelNotFoundException::new);
+    @PatchMapping("/report/{accuserId}/{idAccused}")
+    public ResponseEntity<Rebel> reportRebel (@PathVariable("accuserId") Long accuserId, @PathVariable("idAccused") Long idAccused) {
+        Rebel accuserRebel = rebelService.findById(accuserId).orElseThrow(RebelNotFoundException::new);
 
-        Rebel rebel = rebelService.incrementDenunciations(accusedRebel);
+        Rebel accusedRebel = rebelService.findById(idAccused).orElseThrow(RebelNotFoundException::new);
 
-        return new ResponseEntity<Rebel>(rebelService.save(rebel), HttpStatus.OK);
+        if (rebelService.validateDenunciation(accuserRebel)) {
+            Rebel rebel = rebelService.incrementDenunciations(accusedRebel);
+            return new ResponseEntity<Rebel>(rebelService.save(rebel), HttpStatus.OK);
+        }
+
+        throw new RenegadeReportException();
     }
 
 }
