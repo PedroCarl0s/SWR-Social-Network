@@ -12,14 +12,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+
 @RestController
 @RequestMapping("/v1/api/records/")
+@Api(value = "Records", tags = { "Records" })
 public class RecordsControllerV1 {
 
     @Autowired
     private RecordsService recordsService;
 
-
+    @ApiResponse(code = 200, message = "Return all averages of inventory items")
+    @ApiOperation(value = "Returns all weapons, ammunition, water and food averages per rebel", produces = "application/json")
     @GetMapping("/avg")
     @ResponseStatus(HttpStatus.OK)
     public Map<String, Double> averages() {
@@ -32,6 +38,8 @@ public class RecordsControllerV1 {
         return map;
     }
 
+    @ApiResponse(code = 200, message = "Returns average of weapons")
+    @ApiOperation(value = "Returns average of weapons per rebel", produces = "application/json")
     @GetMapping("/avg/weapons")
     @ResponseStatus(HttpStatus.OK)
     public Map<String, Double> avgWeapons() {
@@ -41,6 +49,8 @@ public class RecordsControllerV1 {
         return map;
     }
 
+    @ApiResponse(code = 200, message = "Returns average of ammunition")
+    @ApiOperation(value = "Returns average of ammunition per rebel", produces = "application/json")
     @GetMapping("/avg/ammunitions")
     @ResponseStatus(HttpStatus.OK)
     public Map<String, Double> avgAmmunitions() {
@@ -50,6 +60,8 @@ public class RecordsControllerV1 {
         return map;
     }
 
+    @ApiResponse(code = 200, message = "Returns average of waters")
+    @ApiOperation(value = "Returns average of waters per rebel", produces = "application/json")
     @GetMapping("/avg/waters")
     @ResponseStatus(HttpStatus.OK)
     public Map<String, Double> avgWaters() {
@@ -59,6 +71,8 @@ public class RecordsControllerV1 {
         return map;
     }
 
+    @ApiResponse(code = 200, message = "Returns average of foods")
+    @ApiOperation(value = "Returns average of foods per rebel", produces = "application/json")
     @GetMapping("/avg/foods")
     @ResponseStatus(HttpStatus.OK)
     public Map<String, Double> avgFoods() {
@@ -68,7 +82,7 @@ public class RecordsControllerV1 {
         return map;
     }
 
-
+    // WIP
     // @GetMapping("/percentage")
     // @ResponseStatus(HttpStatus.OK)
     // public Map<String, Double> percentageRebels() {
