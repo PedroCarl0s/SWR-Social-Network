@@ -9,4 +9,8 @@ public class RenegadeReportException extends RuntimeException {
     public RenegadeReportException() {
         super("This rebel is a renegade and cannot report another rebel");
     }
+
+    public RenegadeReportException(Long id) {
+        super("The rebel with ID " + id + " is a renegade and cannot report another rebel");
+    }
 }
