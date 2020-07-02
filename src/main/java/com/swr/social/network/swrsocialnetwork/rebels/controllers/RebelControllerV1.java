@@ -38,7 +38,7 @@ public class RebelControllerV1 {
 
     @GetMapping("/{id}")
     public ResponseEntity<Rebel> findById(@PathVariable("id") Long id) {
-        Rebel rebel = rebelService.findById(id).orElseThrow(RebelNotFoundException::new);
+        Rebel rebel = rebelService.findById(id).orElseThrow(() -> new RebelNotFoundException(id));
 
         return new ResponseEntity<Rebel>(rebel, HttpStatus.OK);
     }
@@ -50,7 +50,7 @@ public class RebelControllerV1 {
 
     @PatchMapping("/{id}")
     public ResponseEntity<Rebel> updateLocation(@PathVariable("id") Long id, @Valid @RequestBody Location newLocation) {
-        Rebel rebel = rebelService.findById(id).orElseThrow(RebelNotFoundException::new);
+        Rebel rebel = rebelService.findById(id).orElseThrow(() -> new RebelNotFoundException(id));
         rebel.setLocation(newLocation);
 
         return new ResponseEntity<Rebel>(rebelService.save(rebel), HttpStatus.OK);
@@ -58,16 +58,15 @@ public class RebelControllerV1 {
 
     @PatchMapping("/report/{accuserId}/{idAccused}")
     public ResponseEntity<Rebel> reportRebel (@PathVariable("accuserId") Long accuserId, @PathVariable("idAccused") Long idAccused) {
-        Rebel accuserRebel = rebelService.findById(accuserId).orElseThrow(RebelNotFoundException::new);
-
-        Rebel accusedRebel = rebelService.findById(idAccused).orElseThrow(RebelNotFoundException::new);
+        Rebel accuserRebel = rebelService.findById(accuserId).orElseThrow(() -> new RebelNotFoundException(accuserId));
+        Rebel accusedRebel = rebelService.findById(idAccused).orElseThrow(() -> new RebelNotFoundException(idAccused));
 
         if (!rebelService.isRenegade(accuserRebel)) {
             Rebel rebel = rebelService.incrementDenunciations(accusedRebel);
             return new ResponseEntity<Rebel>(rebelService.save(rebel), HttpStatus.OK);
         }
 
-        throw new RenegadeReportException();
+        throw new RenegadeReportException(accuserId);
     }
 
 }
