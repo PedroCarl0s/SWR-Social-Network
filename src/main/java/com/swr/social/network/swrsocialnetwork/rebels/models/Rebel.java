@@ -12,32 +12,41 @@ import javax.validation.constraints.Size;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
+import io.swagger.annotations.ApiModelProperty;
+
 @Entity
 @Table(name = "rebels")
 public class Rebel {
 
+    @ApiModelProperty(notes = "Rebel identifier", name = "id", required = true)
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
+    @ApiModelProperty(notes = "Rebel name", name = "name", required = true, example = "Sidon Ithano")
     @NotNull
     @Size(max = 60)
     private String name;
 
+    @ApiModelProperty(notes = "Rebel gender", name = "gender", required = true, example = "Masc")
     @NotNull
     @Size(max = 15)
     private String gender;
 
+    @ApiModelProperty(notes = "Total denunciations of the rebel", name = "totalDenunciations", value = "false", readOnly = true, hidden = true)
     @JsonProperty(access = Access.READ_ONLY)
     private int totalDenunciations;
 
+    @ApiModelProperty(notes = "Status of rebel", name = "isRenegade", value = "false", readOnly = true, hidden = true)
     @JsonProperty(access = Access.READ_ONLY)
     private boolean isRenegade;
 
+    @ApiModelProperty(notes = "Location of rebel", name = "location", required = true)
     @NotNull
     @Embedded
     private Location location;
 
+    @ApiModelProperty(notes = "Inventory of rebel", name = "inventory", required = true)
     @NotNull
     @Embedded
     private Inventory inventory;
