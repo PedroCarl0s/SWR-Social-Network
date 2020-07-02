@@ -4,18 +4,24 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.Min;
 
+import io.swagger.annotations.ApiModelProperty;
+
 @Embeddable
 public class Inventory {
 
+    @ApiModelProperty(notes = "Weapons total of the rebel", name = "total_weapons", required = true, example = "3")
     @Column(name = "total_weapons")
     private int totalWeapons;
 
+    @ApiModelProperty(notes = "Ammunition total of the rebel", name = "total_ammunition", required = true, example = "6")
     @Column(name = "total_ammunition")
     private int totalAmmunition;
 
+    @ApiModelProperty(notes = "Water total of the rebel", name = "total_water", required = true, example = "2")
     @Column(name = "total_water")
     private int totalWater;
 
+    @ApiModelProperty(notes = "Food total of the rebel", name = "total_food", required = true, example = "5")
     @Column(name = "total_food")
     private int totalFood;
     
