@@ -30,6 +30,10 @@ public class RebelService {
         return rebelDAO.save(rebel);
     }
 
+    public boolean validateDenunciation(Rebel accuserRebel) {
+        return !accuserRebel.getIsRenegade();
+    }
+
     public Rebel incrementDenunciations(Rebel rebel) {
         rebel.setTotalDenunciations();
         if (rebel.getTotalDenunciations() > MAX_DENUNCIATIONS && !rebel.getIsRenegade()) {
