@@ -15,6 +15,8 @@ public class RebelService {
     @Autowired
     private RebelRepository rebelDAO;
 
+    private final int MAX_DENUNCIATIONS = 2;
+
 
     public List<Rebel> findAll() {
         return rebelDAO.findAll();
@@ -26,6 +28,15 @@ public class RebelService {
 
     public Rebel save(Rebel rebel) {
         return rebelDAO.save(rebel);
+    }
+
+    public Rebel incrementDenunciations(Rebel rebel) {
+        rebel.setTotalDenunciations();
+        if (rebel.getTotalDenunciations() > MAX_DENUNCIATIONS && !rebel.getIsRenegade()) {
+            rebel.setAsRenegade();
+        }
+
+        return rebel;
     }
 
 }
