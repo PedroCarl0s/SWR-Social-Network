@@ -57,5 +57,14 @@ public class RebelControllerV1 {
         return new ResponseEntity<Rebel>(rebelService.save(rebel), HttpStatus.OK);
     }
 
+    @PatchMapping("/report/{id}")
+    public ResponseEntity<Rebel> reportRebel (@PathVariable("id") Long idAccused) {
+        Rebel accusedRebel = rebelService.findById(idAccused)
+                .orElseThrow(RebelNotFoundException::new);
+
+        Rebel rebel = rebelService.incrementDenunciations(accusedRebel);
+
+        return new ResponseEntity<Rebel>(rebelService.save(rebel), HttpStatus.OK);
+    }
 
 }
