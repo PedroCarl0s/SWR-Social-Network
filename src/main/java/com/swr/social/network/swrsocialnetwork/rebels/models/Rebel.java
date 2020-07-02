@@ -1,15 +1,16 @@
 package com.swr.social.network.swrsocialnetwork.rebels.models;
 
-import javax.persistence.CascadeType;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 @Entity
 @Table(name = "rebels")
@@ -27,33 +28,33 @@ public class Rebel {
     @Size(max = 15)
     private String gender;
 
+    @JsonProperty(access = Access.READ_ONLY)
+    private int totalDenunciations;
+
+    @JsonProperty(access = Access.READ_ONLY)
+    private boolean isRenegade;
+
     @NotNull
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn
+    @Embedded
     private Location location;
 
     @NotNull
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn
+    @Embedded
     private Inventory inventory;
- 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinColumn
-    private Denunciation denunciation;
 
 
-    public Rebel() {
-        this.denunciation = new Denunciation();
-
-    }
+    public Rebel() {}
     
     public Rebel(@NotNull @Size(max = 60) String name, @NotNull String gender, @NotNull Location location,
             @NotNull Inventory inventory) {
         this.name = name;
         this.gender = gender;
+        this.totalDenunciations = 0;
+        this.isRenegade = false;
         this.location = location;
         this.inventory = inventory;
     }
+
 
     public Long getId() {
         return id;
@@ -95,15 +96,22 @@ public class Rebel {
         this.inventory = inventory;
     }
 
-    public Denunciation getDenunciation() {
-        return denunciation;
+    public int getTotalDenunciations() {
+        return this.totalDenunciations;
     }
 
-    public void setDenuciation(Denunciation denunciation) {
-        this.denunciation = denunciation;
+    public void setTotalDenunciations() {
+        this.totalDenunciations += 1;
     }
 
+    public boolean getIsRenegade() {
+        return this.isRenegade;
+    }
 
+    public void setAsRenegade() {
+        this.isRenegade = true;
+    }
+    
     @Override
     public int hashCode() {
         final int prime = 31;
