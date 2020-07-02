@@ -1,0 +1,41 @@
+package com.swr.social.network.swrsocialnetwork.rebels.controllers;
+
+import java.util.List;
+
+
+import com.swr.social.network.swrsocialnetwork.rebels.exceptions.RebelNotFoundException;
+import com.swr.social.network.swrsocialnetwork.rebels.models.Rebel;
+import com.swr.social.network.swrsocialnetwork.rebels.services.RebelService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/v1/api/rebel")
+public class RebelControllerV1 {
+
+    @Autowired
+    private RebelService rebelService;
+
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<List<Rebel>> listAll() {
+        return new ResponseEntity<List<Rebel>>(rebelService.findAll(), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Rebel> findById(@PathVariable("id") Long id) {
+        Rebel rebel = rebelService.findById(id)
+                .orElseThrow(RebelNotFoundException::new);
+
+        return new ResponseEntity<Rebel>(rebel, HttpStatus.OK);
+    }
+
+}
