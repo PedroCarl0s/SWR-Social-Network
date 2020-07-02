@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import com.swr.social.network.swrsocialnetwork.rebels.exceptions.RebelNotFoundException;
+import com.swr.social.network.swrsocialnetwork.rebels.models.Location;
 import com.swr.social.network.swrsocialnetwork.rebels.models.Rebel;
 import com.swr.social.network.swrsocialnetwork.rebels.services.RebelService;
 
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,6 +46,15 @@ public class RebelControllerV1 {
     @PostMapping
     public ResponseEntity<Rebel> addRebel(@Valid @RequestBody Rebel rebel) {
         return new ResponseEntity<Rebel>(rebelService.save(rebel), HttpStatus.CREATED);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Rebel> updateLocation(@PathVariable("id") Long id, @Valid @RequestBody Location newLocation) {
+        Rebel rebel = rebelService.findById(id)
+                .orElseThrow(RebelNotFoundException::new);
+        rebel.setLocation(newLocation);
+
+        return new ResponseEntity<Rebel>(rebelService.save(rebel), HttpStatus.OK);
     }
 
 
