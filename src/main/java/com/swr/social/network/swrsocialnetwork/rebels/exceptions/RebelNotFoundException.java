@@ -1,6 +1,5 @@
 package com.swr.social.network.swrsocialnetwork.rebels.exceptions;
 
-import com.swr.social.network.swrsocialnetwork.rebels.models.Rebel;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
